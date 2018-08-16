@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?> 
+
+<project component="erlang" >
+<dependencies>
+    <tools>
+        <foss component="erlang" file="otp_src.tar.gz" />        
+    </tools>
+</dependencies>
+<publications>
+		<publication file="otp.tgz"/>
+	</publications>
+</project>
