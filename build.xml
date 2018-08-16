@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="erlang building" default="usage" basedir="../../..">
+
+<import file="${basedir}\sf-prod-builds\production\common\build_common.xml" />
+
+<!-- 
+************************************************************
+*	init_local : local initializations
+************************************************************
+-->
+
+<target name="init_local">
+
+	<property name="component"  value="erlang" />
+
+	<echo message="        PIIL - COMPONENT - ${component} - local initializations" />
+
+	<!-- dependencies definition -->
+	<property name="ComponentDependenciesFile" value="sf-prod-builds\binaries\erlang\project.xml" />	
+
+		<!-- Force linux local compiler	-->
+		<property name="unixProductionTarget" value="suse_64b" />
+		<property name="linux_compiler" value="local"/>
+
+</target>
+
+<target name="compile_clean">
+
+    <echo>PIIL : erlang in a Linux context</echo>
+	
+	<!-- linux delete because of a non linux file name that fails with ant-->
+	<mkdir dir="${ComponentGenerationDir}" />	
+	<exec dir="${ComponentGenerationDir}" executable="rm" failonerror="false">
+		<arg line="-rf ${ComponentGenerationDir}/erlang" />
+	</exec>
+	
+	<!-- create the generation directory -->   
+	<delete dir="${ComponentGenerationDir}" />
+	<mkdir dir="${ComponentGenerationDir}" />
+
+</target>
+
+<target name="compile"  depends="init, compile_clean,get_component_dependencies" >
+
+    <echo>PIIL : erlang BUILDING in a Linux context</echo>
+
+	<!-- get Apache sources -->
+	
+	<echo message="........................"/>
+	<echo message=". Untar erlang sources ."/>	
+	<echo message="........................"/>
+	<mkdir dir="${ComponentGenerationDir}/erlang" />
+	<exec dir="${ComponentGenerationDir}/erlang" executable="tar" failonerror="true">
+		<arg line="xzvf ${ComponentDependencesDir}/tools/otp_src.tar.gz" />
+	</exec>
+
+	<!-- configure, make, make install -->
+
+	<echo message="..................................."/>
+	<echo message=". Configure for erlang generation ."/>	
+	<echo message="..................................."/>
+		
+	<exec dir="${ComponentGenerationDir}/erlang/otp_src_${piil.dependencies.tools.otp_src.version}" executable="sh" failonerror="true">
+          	<arg line="./configure --with-ssl" />
+	</exec>
+	
+	<echo message=".............................."/>
+	<echo message=". make for apache generation ."/>	
+	<echo message=".............................."/>
+
+	<exec dir="${ComponentGenerationDir}/erlang/otp_src_${piil.dependencies.tools.otp_src.version}" executable="make" failonerror="true" />
+    
+	
+	<echo message="......................................"/>
+	<echo message=". make install for apache generation ."/>
+	<echo message="......................................"/>
+
+	<exec dir="${ComponentGenerationDir}/erlang/otp_src_${piil.dependencies.tools.otp_src.version}" executable="make" failonerror="true">
+		<arg line="RELEASE_ROOT=${ComponentGenerationDir}/erlang/target release" />
+	</exec>
+	
+	
+</target>
+
+</project>
