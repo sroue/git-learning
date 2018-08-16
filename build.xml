@@ -146,4 +146,23 @@
 	
 </target>
 
+<!-- 
+************************************************************
+*	archivage_lib
+************************************************************
+-->
+	
+<target name="archivage_lib" depends="init">
+
+	<echo message="        PIIL - COMPONENT - ${component} - archive libraries" />
+		
+	<delete dir="${ComponentArchiveLibDir}" />
+	<mkdir dir="${ComponentArchiveLibDir}" />
+
+	<copy todir="${ComponentArchiveLibDir}" 
+		file="${ComponentBinariesDir}\otp.tgz" />
+	
+</target>
+
+
 </project>
